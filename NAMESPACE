@@ -1,0 +1,20 @@
+## Fonctions une par une...
+##  --> Calcul des rapports 2 à 2
+export( "calc.rapports" )
+
+##  --> Création d'une matrice de p des tests 2 à 2
+export( "creer.Mp" )
+
+##  --> Création d'un graphe à partir d'une matrice de p des tests 2 à 2
+export( "grf.Mp" )
+
+## Fonctions permettant les tests usuels
+exportPattern( "\\.fpc$" )              # Toutes les fonctions se finissant par fpc
+
+
+## Les fonctions extérieures utilisées...
+import( "stats" )
+importFrom( "igraph", "graph_from_adjacency_matrix" )
+importFrom( "car"   , "Anova" )
+# importFrom( "stats", "lm", "anova", "as.formula" )
+## importFrom("utils", "read.table")
