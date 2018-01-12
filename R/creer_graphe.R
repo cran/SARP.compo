@@ -9,6 +9,9 @@
 ## HISTORIQUE
 ##
 ##  12 nov. 2017 : création du fichier
+##
+##   7 jan. 2018 : les nœuds de référence sont indiqués
+##                   avec une couleur différente
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -39,6 +42,17 @@ grf.Mp <- function( Mp, p = 0.05, reference = NULL, groupes = NULL ) {
                                                 mode = "undirected",
                                                 diag = FALSE )
 
+    ## Des nœuds en vert clair par défaut
+    couleurs <- rep( "palegreen", nrow( Mp ) )
+    if ( length( reference ) > 0 ) {
+        ## Les gènes de référence en orange
+        ## Suppose que les nœuds sont dans l'ordre des colonnes
+        couleurs[ which( colnames( Mp ) %in% reference ) ] <- "orange"
+    }
+
+    ## On associe les couleurs aux nœuds
+    igraph::V( grf )$color <- couleurs
+    
     ## On renvoie le graphe
     grf
 }

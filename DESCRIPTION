@@ -1,8 +1,8 @@
 Package: SARP.compo
 Type: Package
 Title: Network-based Interpretation of Changes in Compositional Data
-Version: 0.0.2
-Date: 2018-01-05
+Version: 0.0.3
+Date: 2018-01-09
 Authors@R: person( "Emmanuel", "Curis",
                    email = "emmanuel.curis@parisdescartes.fr",
  		   role  = c( "aut", "cre" ) )
@@ -19,7 +19,7 @@ Imports:
 Encoding: UTF-8
 Language: uk
 NeedsCompilation: no
-Packaged: 2018-01-05 13:12:14 UTC; curis
+Packaged: 2018-01-11 22:31:51 UTC; curis
 Author: Emmanuel Curis [aut, cre]
 Repository: CRAN
-Date/Publication: 2018-01-05 15:57:05 UTC
+Date/Publication: 2018-01-13 00:38:17 UTC
