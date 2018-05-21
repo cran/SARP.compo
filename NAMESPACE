@@ -3,10 +3,33 @@
 export( "calc.rapports" )
 
 ##  --> Création d'une matrice de p des tests 2 à 2
+##             sous forme de matrice ou de data.frame
 export( "creer.Mp" )
+export( "creer.DFp" )
+export( "Mp.DFp" )
 
 ##  --> Création d'un graphe à partir d'une matrice de p des tests 2 à 2
 export( "grf.Mp" )
+export( "grf.DFp" )
+
+##  --> Simulations sous H0 et sous H1
+export( "modele_compo" )
+S3method( plot , SARPcompo.modele )
+
+export( "estimer.alpha" )
+export( "estimer.puissance" )
+S3method( plot , SARPcompo.simulation )
+
+##  --> Recherche du seuil pour contrôler le risque de 1re espèce
+export( "choisir.seuil" )
+S3method( print, SARPcompo.H0 )
+S3method( plot , SARPcompo.H0 )
+
+##  --> Analyse des sous-groupes du graphe
+export( "arbre.Mp" )
+export( "coupures.Mp" )
+S3method( plot, Arbre )
+S3method( plot, Coupures )
 
 ## Fonctions permettant les tests usuels
 exportPattern( "\\.fpc$" )              # Toutes les fonctions se finissant par fpc
@@ -14,7 +37,9 @@ exportPattern( "\\.fpc$" )              # Toutes les fonctions se finissant par 
 
 ## Les fonctions extérieures utilisées...
 import( "stats" )
-importFrom( "igraph", "graph_from_adjacency_matrix" )
-importFrom( "car"   , "Anova" )
+importFrom( "igraph" , "graph_from_adjacency_matrix", "components" )
+importFrom( "car"    , "Anova" )
+importFrom( "graphics", "abline", "plot", "points", "segments", "text", "axis", "lines", "par", "plot.new", "barplot" )
+
 # importFrom( "stats", "lm", "anova", "as.formula" )
 ## importFrom("utils", "read.table")

@@ -4,23 +4,20 @@
 ##
 ## © Emmanuel Curis, novembre 2017
 ##
-## Créer une matrice de degrés de signification
+## Créer une data.frame de degrés de signification
 ## ——————————————————————————————————————————————————————————————————————
 ## HISTORIQUE
 ##
-##  12 nov. 2017 : création du fichier
+##  10 mai 2018 : création du fichier (d'après creer_matrice.R)
 ##
-##  10 mai  2018 : adapté au fait que la fonction de test peut renvoyer
-##                  plusieurs valeurs => on ne garde que la 1re,
-##                  supposée être le p
-##
-##  17 mai  2018 : création à partir d'une data.frame
+##  17 mai 2018 : la data.frame est créée pour que les noms soient des textes
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
 ##
-## Crée une matrice contenant les p pour tous les tests 2 à 2
+## Crée une data frame contenant les p pour tous les tests 2 à 2
 ##   la matrice est forcément symétrique, avec 1 sur la diagonale…
+##   => son stockage sous forme de data.frame ne demande que la partie triangulaire supérieure
 ##
 ## d       = la data.frame contenant les variables nécessaires aux tests
 ## noms    = les noms des variables compositionnelles
@@ -30,11 +27,16 @@
 ## en.log  = si FALSE, les données sont analysées telles qu'elles
 ##           si TRUE , les données sont analysées après transformation log
 ## nom.var = nom de la variable contenant le rapport
+## add.col = noms de colonnes additionnelles
 ## ...     = passés à f.p
 ## 
 ## ——————————————————————————————————————————————————————————————————————
-creer.Mp <- function( d, noms, f.p, log = FALSE, en.log = !log,
-                      nom.var = 'R', ... ) {
+creer.DFp <- function( d, noms, f.p = student.fpc,
+                       log = FALSE, en.log = !log,
+                       nom.var = 'R',
+                       noms.colonnes = c( "Cmp.1", "Cmp.2", "p" ),
+                       add.col = "delta",
+                       ... ) {
     ## On prépare les noms sous forme utilisable
     noms <- obtenir.colonnes( d = d, noms = noms )
 
@@ -44,17 +46,25 @@ creer.Mp <- function( d, noms, f.p, log = FALSE, en.log = !log,
         stop( "Less than 1 usable variable, no possible analysis" )
     }
 
-    ## On construit la matrice des résultats
-    M.p <- matrix( NA, ncol = n.variables, nrow = n.variables )
-    colnames( M.p ) <- noms
-    rownames( M.p ) <- noms
-
-    ## On a forcément des 1 sur la diagonale
-    diag( M.p ) <- 1
+    ## On construit la data.frame des résultats
+    DF.p <- data.frame( unlist( lapply( 1:n.variables,
+                                        function( i ) {
+                                            rep( noms[ i ], n.variables - i )
+                                        } ) ),
+                        unlist( lapply( 2:n.variables,
+                                        function( i ) {
+                                            noms[ i:n.variables ]
+                                        } ) ),
+                        NA, stringsAsFactors = FALSE )
+    names( DF.p ) <- noms.colonnes
+    if ( length( add.col ) > 0 ) {
+        DF.p[ , add.col ] <- NA
+    }
 
     ## On fait les calculs dans les diverses situations…
     ## On prépare la data.frame avec juste les variables complémentaires
     d.calculs <- d[ , -which( names( d ) %in% noms ), drop = FALSE ]
+    idx.ligne <- 1
     for ( i in 1:(n.variables - 1) ) {
         for ( j in (i + 1):n.variables ) {
             if ( FALSE == log ) {
@@ -73,57 +83,12 @@ creer.Mp <- function( d, noms, f.p, log = FALSE, en.log = !log,
             ## On la stocke dans la data.frame
             d.calculs[ , nom.var ] <- R
 
-            ## On fait le calcul
-            M.p[ i, j ] <- f.p( d = d.calculs, variable = nom.var, ... )[ 1 ]
-            M.p[ j, i ] <- M.p[ i, j ]
+            ## On fait le calcul & on stocke
+            DF.p[ idx.ligne, -c( 1,2 ) ] <- f.p( d = d.calculs, variable = nom.var, ... )
+            idx.ligne <- idx.ligne + 1
         }
     }
     
-    ## On renvoie la matrice…
-    M.p
-}
-
-
-
-## ——————————————————————————————————————————————————————————————————————
-##
-## Crée une matrice contenant les p pour tous les tests 2 à 2
-##    à partir des valeurs contenues dans une data.frame correspondante
-##   la matrice est forcément symétrique, avec 1 sur la diagonale…
-##
-## DFp      = la data.frame contenant les valeurs à convertir
-## col.noms = les colonnes contenant les noms des composants
-## col.p    = la colonne contenant les p à utiliser
-## 
-## ——————————————————————————————————————————————————————————————————————
-
-Mp.DFp <- function( DFp, col.noms = c( 1, 2 ), col.p = 'p' ) {
-    ## On force les noms en chaînes
-    if ( is.factor( DFp[ , col.noms[ 1 ] ] ) ) {
-        DFp[ , col.noms[ 1 ] ] <- as.character( DFp[ , col.noms[ 1 ] ] )
-    }
-
-    if ( is.factor( DFp[ , col.noms[ 2 ] ] ) ) {
-        DFp[ , col.noms[ 2 ] ] <- as.character( DFp[ , col.noms[ 2 ] ] )
-    }
-
-    ## On récupère la liste des compossants
-    noms <- sort( unique( c( DFp[ , col.noms[ 1 ] ],
-                             DFp[ , col.noms[ 2 ] ] ) ) )
-    n <- length( noms )
-
-    ## On crée la matrice, pour l'instant identité
-    Mp <- diag( nrow = n )
-    colnames( Mp ) <- noms
-    rownames( Mp ) <- noms
-
-    ## On remplit la matrice avec les valeurs demandées
-    for ( i in 1:nrow( DFp ) ) {
-        nom1 <- DFp[ i, col.noms[ 1 ] ]
-        nom2 <- DFp[ i, col.noms[ 2 ] ]
-
-        Mp[ nom1, nom2 ] <- Mp[ nom2, nom1 ] <- DFp[ i, col.p ]
-    }
-
-    Mp
+    ## On renvoie la data.frame…
+    DF.p
 }

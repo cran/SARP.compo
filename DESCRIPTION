@@ -1,8 +1,8 @@
 Package: SARP.compo
 Type: Package
 Title: Network-based Interpretation of Changes in Compositional Data
-Version: 0.0.3
-Date: 2018-01-09
+Version: 0.0.7
+Date: 2018-05-10
 Authors@R: person( "Emmanuel", "Curis",
                    email = "emmanuel.curis@parisdescartes.fr",
  		   role  = c( "aut", "cre" ) )
@@ -13,13 +13,13 @@ Description: Provides a set of functions to interpret changes in
  comparisons: computation of all pairwise ratio, construction of a
  p-value matrix of all pairwise tests of these ratios between
  conditions, conversion of this matrix to a network.
-Suggests:
-Depends: igraph,car
-Imports:
+Suggests: lme4
+Depends: igraph
+Imports: car
 Encoding: UTF-8
 Language: uk
 NeedsCompilation: no
-Packaged: 2018-01-11 22:31:51 UTC; curis
+Packaged: 2018-05-21 21:08:08 UTC; curis
 Author: Emmanuel Curis [aut, cre]
 Repository: CRAN
-Date/Publication: 2018-01-13 00:38:17 UTC
+Date/Publication: 2018-05-21 21:55:50 UTC

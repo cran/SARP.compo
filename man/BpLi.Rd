@@ -23,14 +23,16 @@ data(BpLi_J4)
     Li \tab factor \tab Is lithium present (Oui) or not (Non) in the
     culture medium of the cells \cr
   }
-  Other columns are the different circadian genes and reference genes.
-  Three sets of experiments were done, using three different dilutions
-  according to the explored gene: 1/20 (PER3, BHLHE41, NR1D1, DBP),
-  1/100 (GSK3b, RORA, PER1, PER2, CLOCK, ARNTL, CRY2, BHLHE40) and 1/200
-  (ARNTL2, TIMELESS, CRY1, CSNK1E). The numerical suffixe after the
-  reference gene name (SDHA or HPRT) gives this dilution level -- for
-  instance, SDHA_20 is for the 1/20 dilution level, HRPT_100 for the
-  1/100 level...
+  Other columns are the different circadian genes and reference genes
+  expression levels, expressed as quantities in arbitrary units after
+  quantitative reverse transcription PCR assays, using the Syber Green
+  technology.  Three sets of assays were done, using three
+  different dilutions according to the explored gene: 1/20 (PER3,
+  BHLHE41, NR1D1, DBP), 1/100 (GSK3b, RORA, PER1, PER2, CLOCK, ARNTL,
+  CRY2, BHLHE40) and 1/200 (ARNTL2, TIMELESS, CRY1, CSNK1E). The
+  numerical suffixe after the reference gene name (SDHA or HPRT) gives
+  this dilution level -- for instance, SDHA_20 is for the 1/20 dilution
+  level, HRPT_100 for the 1/100 level...
 
   Patients were classified as presenting a good response (R) or a lack
   of responce (NR) to lithium treatment based on the ALDA scale, see the
@@ -38,8 +40,8 @@ data(BpLi_J4)
   patients, obtained from blood samples, were cultivated for 2 (BpLi_J2)
   or 4 (BpLi_J4) days either with or without LiCl.
 }
-\source{Data courtesy communicated, and allowed to be included in the
-  package, by the authors.
+\source{Data courtesy allowed to be included in the
+  package, by Cynthia Marie-Claire.
 }
 \references{
   Geoffrey, P. A., Curis E., Courtin, C., Moreira, J., Morvillers, T.,

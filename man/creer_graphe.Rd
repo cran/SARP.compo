@@ -1,6 +1,7 @@
 \name{creer_graphe}
 \alias{creer_graphe}
 \alias{grf.Mp}
+\alias{grf.DFp}
 \alias{create.graphe}
 \title{
   Create a graph using a set of p-values from pairwise tests
@@ -13,20 +14,41 @@
 
 \usage{
 grf.Mp( Mp, p = 0.05, reference = NULL, groupes = NULL )
+
+grf.DFp( DFp, col.noms = c( 1, 2 ), p = 0.05, col.p = 'p',
+         reference = NULL, groupes = NULL )
 }
 \arguments{
   \item{Mp}{
-    A square, symmetric data frame containing \emph{p}-values. Element
+    A square, symmetric matrix containing \emph{p}-values. Element
     in row \eqn{i} and line \eqn{j} should contain the \emph{p}-value
     for testing the \eqn{\frac{i}{j}} ratio. The diagonal is ignored.
   }
+  
+  \item{DFp}{
+    A data frame containing at least three columns: two with component
+    names and one with \emph{p}-values for the corresponding ratio.
+  }
+
+  \item{col.noms}{ A length two vector giving the names of the two columns
+    containing the components names.
+  }
 
   \item{p}{ The \emph{p}-value cutoff for adding an edge between two
-  nodes.  See details.
+    nodes.  See details.
   }
 
+  \item{col.p}{ The name of the column containing the \emph{p}-values to
+    use to create the graph.
+  }  
+
   \item{reference}{
-  }
+    A character vector giving the names of nodes that should be
+    displayed with a different color in the created graph.  These names
+    should match column names used in Mp. Typical use would be for
+    reference genes in qRT-PCR experiments.  By default, all nodes are
+    displayed in palegreen; reference nodes, if any, will be displayed
+    in orange. }
   
   \item{groupes}{
   }  
@@ -53,7 +75,10 @@ grf.Mp( Mp, p = 0.05, reference = NULL, groupes = NULL )
 }
 \seealso{
   \code{\link{creer.Mp}} to create a matrix of \emph{p}-values for all
-    possible ratios of a compositional vector.
+  possible ratios of a compositional vector.
+
+  \code{\link{creer.DFp}} to create a data.frame of \emph{p}-values for all
+  possible ratios of a compositional vector.
 }
 \examples{
    # load the potery data set

@@ -78,11 +78,11 @@ creer.Mp( d, noms, f.p, log = FALSE, en.log = !log,
 \details{
   This function constructs a \eqn{n\times n} matrix, where \code{n =
   length( noms )} (after eventually removing names in \code{noms} that
-  do not correspond numeric variables). Term \eqn{(i,j)} in this matrix
-  is the result of the \code{f.p} function when applied on the ratio of
-  variables \code{noms[ i ]} and \code{noms[ j ]} (or on its log, if
-  either \code{(log == TRUE) && (en.log == FALSE)} or \code{(log ==
-    FALSE) && (en.log == TRUE)}).
+  do not correspond to numeric variables). Term \eqn{(i,j)} in this
+  matrix is the result of the \code{f.p} function when applied on the
+  ratio of variables \code{noms[ i ]} and \code{noms[ j ]} (or on its
+  log, if either \code{(log == TRUE) && (en.log == FALSE)} or \code{(log
+  == FALSE) && (en.log == TRUE)}).
 
   The \code{f.p} function is always called only once, for \eqn{i < j},
   and the other term is obtained by symmetry.
