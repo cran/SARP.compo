@@ -21,7 +21,7 @@ estimer.puissance( composition, cv.composition,
                    avec.classique = length( attr( composition, "reference" ) ) > 0,
                    f.correct.classique = genes.trouves,
                    genes.attendus,
-                   B = 3000,
+                   B = 3000, n.coeurs = 1,
                    \dots )
 
 estimer.alpha( composition, cv.composition,
@@ -29,7 +29,7 @@ estimer.alpha( composition, cv.composition,
                f.p, v.X = 'Condition',
                seuil.candidats = ( 5:30 ) / 100,
                avec.classique = length( attr( composition, "reference" ) ) > 0,
-               B = 3000,
+               B = 3000, n.coeurs = 1,
                \dots )
 }
 \arguments{
@@ -102,6 +102,10 @@ estimer.alpha( composition, cv.composition,
   }
 
   \item{B}{The number of simulations to be done.}
+
+  \item{n.coeurs}{The number of CPU cores to use in computation, with
+   parallelization using forks (does not work on Windows) with the help
+   of the parallel package.}
   
   \item{...}{
     Additionnal parameters for helper functions, including \code{f.p},

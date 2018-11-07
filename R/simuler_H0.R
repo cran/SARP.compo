@@ -23,6 +23,8 @@
 ##
 ##  12 mai  2018 : généralisé choisir.seuil pour avoir un masque de data.frame quelconque
 ##                 changé la fonction par défaut à student.fpc : légèrement plus rapide
+##
+##   1 oct. 2018 : réarrangé choisir_seuil pour utiliser le parallélisme
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -41,6 +43,7 @@
 ## en.log         = si TRUE, simulation log-normale
 ## n.quantifies   = le nombre de gènes *quantifiés*
 ## masque         = un masque de data.frame
+## n.coeurs       = nombre de cœurs à utiliser pour les calculs
 ## ...            = paramètres additionnels pour f.p
 ## ——————————————————————————————————————————————————————————————————————
 
@@ -52,6 +55,7 @@ choisir.seuil <- function( n.genes,
                            f.p = student.fpc, frm = R ~ Groupe,
                            normaliser = FALSE, en.log = TRUE,
                            n.quantifies = n.genes, masque,
+                           n.coeurs = 1,
                            ... ) {
     ## On contrôle les seuils
     if ( any( ( seuil.p < 0 ) | ( seuil.p > 1 ) ) ) {
@@ -89,7 +93,7 @@ choisir.seuil <- function( n.genes,
     res.simulation <- data.frame( 'N' = 1:B )
     res.simulation[ , 1 + 1:n.seuils ] <- NA
 
-    for ( i in 1:B ) {
+    simulation <- function( i ) {
         cat( sep = "",
              "Simulation ", i, "/", B, "\r" )
 
@@ -135,7 +139,15 @@ choisir.seuil <- function( n.genes,
                           igraph::is_connected( grf )
                       } )
         ok <- unlist( ok )
-        res.simulation[ i , -1 ] <- ok
+    }
+
+    if ( 1 == n.coeurs ) {
+        for ( i in 1:B ) {
+            res.simulation[ i , -1 ] <- simulation( i )
+        }
+    } else {
+        res.simulation[ , -1 ] <- do.call( rbind,
+                                           parallel::mclapply( 1:B, simulation, mc.cores = n.coeurs ) )
     }
     cat( sep = "",
          "Binding results...", "\r" )
@@ -284,7 +296,7 @@ estimer.alpha <- function( composition, cv.composition,
                            f.p, v.X = 'Condition',
                            seuil.candidats = ( 5:30 ) / 100,
                            avec.classique = length( attr( composition, "reference" ) ) > 0,
-                           B = 3000,
+                           B = 3000, n.coeurs = 1,
                            ... ) {
     ## Contrôles...
     if ( !( 'SARPcompo.modele' %in% class( composition ) ) ) {
@@ -330,8 +342,10 @@ estimer.alpha <- function( composition, cv.composition,
                           'Seuil'      = rep( seuil.candidats, B ) )
     df.res[ , colonnes ] <- NA
 
-    ## On fait les simulations une par une
-    for ( i in 1:B ) {
+    ## La fonction de simulation
+    simulation <- function( i ) {
+        cat( "Simulation", i, "/", B )
+        
         ## Simulation des données
         d <- simuler.experience( me.composition = me.composition,
                                  cv.composition = cv.composition, en.log = TRUE,
@@ -343,9 +357,23 @@ estimer.alpha <- function( composition, cv.composition,
                                     reference = attr( composition, "reference" ),
                                     noms = colnames( composition$Absolue ),
                                     avec.classique = avec.classique,
-                                    ... )
-        ## print( res )
-        df.res[ (i - 1) * n.seuils + 1:n.seuils, colonnes ] <- res[ , colonnes ]
+                                   ... )
+        
+        ## On renvoie...
+        res
+    }
+
+    ## On fait les simulations une par une
+    if ( 1 == n.coeurs ) {
+        for ( i in 1:B ) {
+            res <- simulation( i )
+            
+            ## print( res )
+            df.res[ (i - 1) * n.seuils + 1:n.seuils, colonnes ] <- res[ , colonnes ]
+        }
+    } else {
+        df.res[ , colonnes ] <- do.call( rbind,
+                                         mclapply( 1:B, simulation, mc.cores = n.coeurs ) )
     }
 
     ## On condense les résultats...

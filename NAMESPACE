@@ -3,14 +3,17 @@
 export( "calc.rapports" )
 
 ##  --> Création d'une matrice de p des tests 2 à 2
-##             sous forme de matrice ou de data.frame
+##             sous forme de matrice, de data.frame ou de fichier
 export( "creer.Mp" )
 export( "creer.DFp" )
+export( "creer.Fp" )
+
 export( "Mp.DFp" )
 
 ##  --> Création d'un graphe à partir d'une matrice de p des tests 2 à 2
 export( "grf.Mp" )
 export( "grf.DFp" )
+export( "grf.Fp" )
 
 ##  --> Simulations sous H0 et sous H1
 export( "modele_compo" )
@@ -19,6 +22,8 @@ S3method( plot , SARPcompo.modele )
 export( "estimer.alpha" )
 export( "estimer.puissance" )
 S3method( plot , SARPcompo.simulation )
+
+export( "distrib.distances" )
 
 ##  --> Recherche du seuil pour contrôler le risque de 1re espèce
 export( "choisir.seuil" )
@@ -37,9 +42,12 @@ exportPattern( "\\.fpc$" )              # Toutes les fonctions se finissant par 
 
 ## Les fonctions extérieures utilisées...
 import( "stats" )
-importFrom( "igraph" , "graph_from_adjacency_matrix", "components" )
+importFrom( "igraph", "V", "V<-", "add.edges", "add.vertices",
+            "components", "graph_from_adjacency_matrix",
+            "graph_from_data_frame", "make_empty_graph", "make_full_graph", "vertices" )
 importFrom( "car"    , "Anova" )
 importFrom( "graphics", "abline", "plot", "points", "segments", "text", "axis", "lines", "par", "plot.new", "barplot" )
+importFrom( "utils", "read.table", "write.table" )
+importFrom( "parallel", "mclapply" )
 
 # importFrom( "stats", "lm", "anova", "as.formula" )
-## importFrom("utils", "read.table")

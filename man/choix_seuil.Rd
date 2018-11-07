@@ -18,8 +18,9 @@ choisir.seuil( n.genes,
                B = 3000, conf.level = 0.95,
                f.p = student.fpc, frm = R ~ Groupe,
                normaliser = FALSE, en.log = TRUE,
-               n.quantifies = n.genes,
-               masque,  ... ) 
+               n.quantifies = n.genes, masque,
+               n.coeurs = 1,
+               ... ) 
 }
 
 \arguments{
@@ -82,7 +83,11 @@ choisir.seuil( n.genes,
    containing values \sQuote{G1} repeated \code{taille.groupes[ 1 ]}
    times, \sQuote{G2} repeated \code{taille.groupes[ 2 ]} times and so
    on.}
-  
+
+  \item{n.coeurs}{The number of CPU cores to use in computation, with
+   parallelization using forks (does not work on Windows) with the help
+   of the parallel package.}
+ 
   \item{\dots}{additional arguments, to be used by the analysis function f.p}
 }
 

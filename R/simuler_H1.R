@@ -16,14 +16,14 @@
 ##
 ## Simuler une expérience sous H1 « simple »
 ##
-## composition    = un modèle de médianes de compositions
+## me.composition = un modèle de médianes de compositions
 ## cv.composition = les CV qui vont avec
 ## en.log         = si TRUE, les données dans ces deux matrices sont déjà en log
 ## taille.groupes = la taille de chaque groupe (= chaque condition)
 ## masque         = un masque de data.frame
 ## ——————————————————————————————————————————————————————————————————————
 simuler.experience <- function( me.composition, cv.composition, en.log = FALSE,
-                                taille.groupes = 10, masque ) {
+                                taille.groupes = 10, masque, v.Condition = 'Condition' ) {
     ## On prépare les CV si jamais les même partout
     if ( length( cv.composition ) == 1 ) {
         cv.composition <- matrix( cv.composition,
@@ -56,6 +56,7 @@ simuler.experience <- function( me.composition, cv.composition, en.log = FALSE,
         masque <- data.frame( 'Condition' = rep( rownames( me.composition ),
                                                  taille.groupes ),
                                stringsAsFactors = FALSE )
+        v.Condition = 'Condition'
     }
 
     ## On génère avec un modèle log-normal qui va bien
@@ -64,7 +65,7 @@ simuler.experience <- function( me.composition, cv.composition, en.log = FALSE,
     for ( gene in 1:ncol( me.composition ) ) {
         mu    <- me.composition[ , gene ]
         sigma <- cv.composition[ , gene ]
-        masque[ , noms.genes[ gene ] ] <- rnorm( n.valeurs ) * sigma[ masque$Condition ] + mu[ masque$Condition ]
+        masque[ , noms.genes[ gene ] ] <- rnorm( n.valeurs ) * sigma[ masque[ , v.Condition] ] + mu[ masque[ , v.Condition ] ]
     }
 
     ## Au besoin, on repasse en échelle d'origine
@@ -195,7 +196,7 @@ estimer.puissance <- function( composition, cv.composition,
                                avec.classique = length( attr( composition, "reference" ) ) > 0,
                                f.correct.classique = genes.trouves,
                                genes.attendus,
-                               B = 3000,
+                               B = 3000, n.coeurs = 1,
                                ... ) {
     ## Contrôles...
     if ( !( 'SARPcompo.modele' %in% class( composition ) ) ) {
@@ -255,8 +256,10 @@ estimer.puissance <- function( composition, cv.composition,
                           'Seuil'      = rep( seuil.candidats, B ) )
     df.res[ , colonnes ] <- NA
 
-    ## On fait les simulations une par une
-    for ( i in 1:B ) {
+    ## La fonction de simulation
+    simulation <- function( i ) {
+        cat( sep = "", "Simulation ", i, " / ", B, "\r" )
+
         ## Simulation des données
         d <- simuler.experience( me.composition = me.composition,
                                  cv.composition = cv.composition, en.log = TRUE,
@@ -272,11 +275,25 @@ estimer.puissance <- function( composition, cv.composition,
                                     f.correct.classique = f.correct.classique,
                                     groupes.attendus = groupes.attendus,
                                     genes.attendus   = genes.attendus,
-                                    ... )
-        ## print( res )
-        df.res[ (i - 1) * n.seuils + 1:n.seuils, colonnes ] <- res[ , colonnes ]
+                                   ... )
+        ## On renvoie
+        res
     }
-
+    
+    ## On fait les simulations une par une
+    if( 1 == n.coeurs ) {
+        for ( i in 1:B ) {
+            ## Simulation des données
+            res <- simulation( i )
+            ## print( res )
+            df.res[ (i - 1) * n.seuils + 1:n.seuils, colonnes ] <- res[ , colonnes ]
+        }
+    } else {
+        df.res[ , colonnes ] <- do.call( rbind,
+                                         parallel::mclapply( 1:B, simulation, mc.cores = n.coeurs ) )
+    }
+    cat( sep = "", "\n" )
+    
     ## On condense les résultats...
     res <- condenser.resultats( df.res, H0 = FALSE )
     

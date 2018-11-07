@@ -1,11 +1,12 @@
 Package: SARP.compo
 Type: Package
-Title: Network-based Interpretation of Changes in Compositional Data
-Version: 0.0.7
-Date: 2018-05-10
+Title: Network-Based Interpretation of Changes in Compositional Data
+Version: 0.0.8
+Date: 2018-11-06
 Authors@R: person( "Emmanuel", "Curis",
                    email = "emmanuel.curis@parisdescartes.fr",
- 		   role  = c( "aut", "cre" ) )
+ 		   role  = c( "aut", "cre" ),
+		   comment = c( ORCID = "0000-0001-8382-1493" ) )
 Maintainer: Emmanuel Curis <emmanuel.curis@parisdescartes.fr>
 License: Artistic-2.0
 Description: Provides a set of functions to interpret changes in
@@ -17,9 +18,8 @@ Suggests: lme4
 Depends: igraph
 Imports: car
 Encoding: UTF-8
-Language: uk
 NeedsCompilation: no
-Packaged: 2018-05-21 21:08:08 UTC; curis
-Author: Emmanuel Curis [aut, cre]
+Packaged: 2018-11-07 08:28:30 UTC; curis
+Author: Emmanuel Curis [aut, cre] (<https://orcid.org/0000-0001-8382-1493>)
 Repository: CRAN
-Date/Publication: 2018-05-21 21:55:50 UTC
+Date/Publication: 2018-11-07 09:30:03 UTC

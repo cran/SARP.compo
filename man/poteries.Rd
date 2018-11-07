@@ -51,8 +51,8 @@
   levels( dcar$Site )[ c( 1, 3, 4 ) ] <- c( "AshleyRails", "Islethorns", "Llanedyrn" )
 
   # Reconstruct the DASL version of this dataset
-  dasl <- dcar[ , c( 2:6, 1 ) ]
-  levels( dasl$Site ) <- c( 'A', 'C', 'I', 'L' )
+  ddasl <- dcar[ , c( 2:6, 1 ) ]
+  levels( ddasl$Site ) <- c( 'A', 'C', 'I', 'L' )
 }
 \references{
   A. Tubb, A. J. Parker, and G. Nickless (1980). The analysis of
