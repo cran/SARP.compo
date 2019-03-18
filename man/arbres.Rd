@@ -10,7 +10,7 @@
 }
 
 \usage{
-arbre.Mp( Mp, en.log = FALSE, reference = NA )
+arbre.Mp( Mp, en.log = FALSE, reference = NA, complement = FALSE )
 
 \method{plot}{Arbre}(x, seuil.p = 0.05,
                      xlab = "Composant",
@@ -37,6 +37,11 @@ arbre.Mp( Mp, en.log = FALSE, reference = NA )
   names of reference genes. Corresponding leaves will then be drawn in
   orange, whereas leaves for genes of interests will be drawn in
   palegreen (like graphs).}
+
+  \item{complement}{
+    A logical. If TRUE, the tree is built using the complement of the
+    graph, as when using equivalence test to build the graph.
+  }
 
   \item{x}{The tree to be drawn}
 

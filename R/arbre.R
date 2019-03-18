@@ -81,7 +81,10 @@ coupures.Mp <- function( Mp ) {
 ## La version visible de l'extérieur
 ##   (se charge aussi de lui donner les classes adaptées...)
 ## 
-arbre.Mp <- function( Mp, en.log = FALSE, reference = NA ) {
+arbre.Mp <- function( Mp, en.log = FALSE, reference = NA, complement = FALSE ) {
+    if ( TRUE == complement ) {
+        stop( "Building tree for equivalence test based graphs is currently unimplemented" )
+    }
     arbre <- arbre.interne( Mp, en.log = en.log,
                             noms = colnames( Mp ), reference = reference )
 
@@ -121,7 +124,7 @@ creer.feuille <- function( cmp, noms, ref ) {
 ##
 ## Version interne, qui fait le travail
 ## 
-arbre.interne <- function( Mp, en.log, noms, reference ) {
+arbre.interne <- function( Mp, en.log, noms, reference, complement = FALSE ) {
     K <- nrow( Mp )
     ## Si deux composants seulement : trivial
     if ( 2 == K ) {
@@ -144,7 +147,7 @@ arbre.interne <- function( Mp, en.log, noms, reference ) {
 
     ## Combien de sous-graphes pour la Ke valeur de p ?
     ##   la première valeur est forcément associée à un graphe : on est tranquille
-    ss.grf <- components( grf.Mp( Mp, p = p[ 2 ] ) )
+    ss.grf <- components( grf.Mp( Mp, p = p[ 2 ], complement = complement ) )
     n.graphes <- ss.grf$no
 
     ## Tant qu'un seul graphe, on avance dans les p...

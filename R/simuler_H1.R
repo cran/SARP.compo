@@ -289,8 +289,9 @@ estimer.puissance <- function( composition, cv.composition,
             df.res[ (i - 1) * n.seuils + 1:n.seuils, colonnes ] <- res[ , colonnes ]
         }
     } else {
+        ## Attention, 1re colonne des résultats de simulation = le seuil
         df.res[ , colonnes ] <- do.call( rbind,
-                                         parallel::mclapply( 1:B, simulation, mc.cores = n.coeurs ) )
+                                         parallel::mclapply( 1:B, simulation, mc.cores = n.coeurs ) )[ , colonnes ]
     }
     cat( sep = "", "\n" )
     
@@ -298,6 +299,7 @@ estimer.puissance <- function( composition, cv.composition,
     res <- condenser.resultats( df.res, H0 = FALSE )
     
     ## On renvoie les résultats
+    attr( res, "Complets" ) <- df.res
     res
 }
 

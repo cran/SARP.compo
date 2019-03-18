@@ -91,5 +91,3 @@ calc.rapports( d, noms, log = FALSE, isoler = FALSE )
 
    identical( d.r$Al.Fe.r, d.r$Al / d.r$Fe )
 }
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

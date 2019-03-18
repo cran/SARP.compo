@@ -31,11 +31,13 @@
 ## p  = le p servant de seuil pour créer/ôter un lien entre deux nœuds
 ## reference = les nœuds [=variables] « de référence »
 ## groupes   = groupes de nœuds allant logiquement ensemble
+## complement = doit-on construire le complément ?
 ##
 ## Renvoie un graphe…
 ## ——————————————————————————————————————————————————————————————————————
 
-grf.Mp <- function( Mp, p = 0.05, reference = NULL, groupes = NULL ) {
+grf.Mp <- function( Mp, p = 0.05, reference = NULL, groupes = NULL,
+                    complement = FALSE ) {
     ## On applique le filtre
     ##  1) on ôte les arêtes des tests significatifs : p < seuil
     Mp[ which( Mp < p ) ] <- 0
@@ -58,6 +60,11 @@ grf.Mp <- function( Mp, p = 0.05, reference = NULL, groupes = NULL ) {
 
     ## On associe les couleurs aux nœuds
     V( grf )$color <- couleurs
+
+    ## Si on demande le complémentaire : on le fait
+    if ( TRUE == complement ) {
+        grf <- igraph::complementer( grf )
+    }
     
     ## On renvoie le graphe
     grf

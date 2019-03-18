@@ -112,6 +112,8 @@ anva_SC.fpc( d, variable, frm, SC = 1, type = 1, \dots )
   \code{\link{kruskal.test}}, \code{\link{lm}}, \code{\link{anova}},
   \code{\link[car]{Anova}}, \code{\link{oneway.test}}, for corresponding tests.
 
+  \code{\link{equiv.fpc}} for an approach using equivalence tests.
+ 
   \code{\link{creer.Mp}} to use these functions to create a matrix of
   \emph{p}-values.
 }

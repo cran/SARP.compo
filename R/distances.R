@@ -8,7 +8,9 @@
 ## ——————————————————————————————————————————————————————————————————————
 ## HISTORIQUE
 ##
-##  1 oct.  2018 : création du fichier
+##  1 oct. 2018 : création du fichier
+##
+## 12 nov. 2018 : les distances doivent être numériques, pas des facteurs !
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -91,6 +93,9 @@ distrib.distances <- function( n.genes,
     ## On construit la table des valeurs trouvées, comme une data.frame
     d <- as.data.frame( table( s ) )
     names( d ) <- c( 'Distance', 'Nombre' )
+    d$Distance <- as.integer( as.character( d$Distance ) )
+
+    ## Calcul des proportions estimées de chaque distance
     d$Proportion <- d$Nombre / B
 
     ## Les intervalles de confiance exacts

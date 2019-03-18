@@ -13,7 +13,8 @@
 }
 
 \usage{
-grf.Mp( Mp, p = 0.05, reference = NULL, groupes = NULL )
+grf.Mp( Mp, p = 0.05, reference = NULL, groupes = NULL,
+        complement = FALSE )
 
 grf.DFp( DFp, col.noms = c( 1, 2 ), p = 0.05, col.p = 'p',
          reference = NULL, groupes = NULL )
@@ -51,7 +52,14 @@ grf.DFp( DFp, col.noms = c( 1, 2 ), p = 0.05, col.p = 'p',
     in orange. }
   
   \item{groupes}{
-  }  
+  }
+
+  \item{complement}{
+    A logical. If TRUE, the complement of the graph is returned. It
+    allows to construct graphs using equivalence tests, instead of
+    difference tests (that is, to keep an edge between two nodes if the
+    test is significant, instead of non-significant).
+  }
 }
 
 \details{
