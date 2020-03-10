@@ -167,17 +167,21 @@ grf.Fp( nom.fichier, col.noms = c( 1, 2 ), p = 0.05, col.p = 'p',
    # load the potery data set
    data( poteries )
 
+   # Create the file name in R temporary directory
+   nom.fichier <- paste0( tempdir(), "/fichier_test.csv" )
+   nom.fichier
+
    # Compute one-way ANOVA p-values for all ratios in this data set
    #  and store them in a text file
-   creer.Fp( poteries, "fichier_test.csv",
+   creer.Fp( poteries, nom.fichier,
              c( 'Al', 'Na', 'Fe', 'Ca', 'Mg' ),
              f.p = anva1.fpc, v.X = 'Site' )
 
    # Make a graphe from it and plot it
-   plot( grf.Fp( "fichier_test.csv" ) )
+   plot( grf.Fp( nom.fichier ) )
 
    # The file is a simple text-file that can be read as a data.frame
-   DFp <- read.table( "fichier_test.csv", header = TRUE, sep = ";", dec = "," )
+   DFp <- read.table( nom.fichier, header = TRUE, sep = ";", dec = "," )
    DFp  
 }
 \keyword{ compositional }% __ONLY ONE__ keyword per line

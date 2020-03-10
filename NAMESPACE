@@ -27,6 +27,7 @@ export( "distrib.distances" )
 
 ##  --> Recherche du seuil pour contrôler le risque de 1re espèce
 export( "choisir.seuil" )
+export( "choisir.seuil.equiv" )
 S3method( print, SARPcompo.H0 )
 S3method( plot , SARPcompo.H0 )
 

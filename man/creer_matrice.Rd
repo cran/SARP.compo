@@ -14,7 +14,7 @@
 
 \usage{
 creer.Mp( d, noms, f.p, log = FALSE, en.log = !log,
-          nom.var = 'R', \dots )
+          nom.var = 'R', n.coeurs = 1, \dots )
 }
 \arguments{
   \item{d}{
@@ -70,6 +70,10 @@ creer.Mp( d, noms, f.p, log = FALSE, en.log = !log,
     gave a valid column name, for instance using
     \code{\link{make.names}}.
   }
+
+  \item{n.coeurs}{The number of CPU cores to use in computation, with
+   parallelization using forks (does not work on Windows) with the help
+   of the parallel package.}
 
   \item{\dots}{additional arguments to \code{f.p}, passed unchanged to
     it.}

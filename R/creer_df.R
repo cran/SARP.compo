@@ -11,6 +11,8 @@
 ##  10 mai 2018 : création du fichier (d'après creer_matrice.R)
 ##
 ##  17 mai 2018 : la data.frame est créée pour que les noms soient des textes
+##
+##   8 nov 2019 : parallélisation de la construction de la data.frame
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -28,6 +30,7 @@
 ##           si TRUE , les données sont analysées après transformation log
 ## nom.var = nom de la variable contenant le rapport
 ## add.col = noms de colonnes additionnelles
+## n.coeurs= nombre de cœurs à utiliser pour la parallélisation
 ## ...     = passés à f.p
 ## 
 ## ——————————————————————————————————————————————————————————————————————
@@ -36,6 +39,7 @@ creer.DFp <- function( d, noms, f.p = student.fpc,
                        nom.var = 'R',
                        noms.colonnes = c( "Cmp.1", "Cmp.2", "p" ),
                        add.col = "delta",
+                       n.coeurs = 1,
                        ... ) {
     ## On prépare les noms sous forme utilisable
     noms <- obtenir.colonnes( d = d, noms = noms )
@@ -64,28 +68,73 @@ creer.DFp <- function( d, noms, f.p = student.fpc,
     ## On fait les calculs dans les diverses situations…
     ## On prépare la data.frame avec juste les variables complémentaires
     d.calculs <- d[ , -which( names( d ) %in% noms ), drop = FALSE ]
-    idx.ligne <- 1
-    for ( i in 1:(n.variables - 1) ) {
-        for ( j in (i + 1):n.variables ) {
-            if ( FALSE == log ) {
-                ## Données brutes : on fait le rapport…
-                R <- d[ , noms[ i ] ] / d[ , noms[ j ] ]
-            } else {
-                ## Données en log : on fait la différence…
-                R <- d[ , noms[ i ] ] - d[ , noms[ j ] ]
+    if ( 1 == n.coeurs ) {
+        idx.ligne <- 1
+        for ( i in 1:(n.variables - 1) ) {
+            for ( j in (i + 1):n.variables ) {
+                if ( FALSE == log ) {
+                    ## Données brutes : on fait le rapport…
+                    R <- d[ , noms[ i ] ] / d[ , noms[ j ] ]
+                } else {
+                    ## Données en log : on fait la différence…
+                    R <- d[ , noms[ i ] ] - d[ , noms[ j ] ]
+                }
+
+                ## Si demandé, on passe en log
+                if ( TRUE == en.log ) {
+                    R <- log( R )
+                }
+
+                ## On la stocke dans la data.frame
+                d.calculs[ , nom.var ] <- R
+
+                ## On fait le calcul & on stocke
+                DF.p[ idx.ligne, -c( 1,2 ) ] <- f.p( d = d.calculs, variable = nom.var, ... )
+                idx.ligne <- idx.ligne + 1
             }
+        }
+    } else {
+        ## ## On répartit les cœurs en deux groupes :
+        ## ##  - boucle interne
+        ## ##  - boucle externe
+        ## n.coeurs <- max( 1, n.coeurs /  2 )
 
-            ## Si demandé, on passe en log
-            if ( TRUE == en.log ) {
-                R <- log( R )
-            }
+        ## Les cœurs sont utilisés pour paralléliser la boucle interne...
+        for ( i in 1:(n.variables - 1) ) {
+            ## Lignes à faire
+            idx.ligne.debut <-  i     + (i - 1) * ( ( n.variables - 1 ) -  i      / 2 )
+            idx.ligne.fin   <-  i + 1 + (i    ) * ( ( n.variables - 1 ) - (i + 1) / 2 ) - 1
+            
+            ## On parallélise les calculs pour toute la ligne            
+            ligne.p <- parallel::mclapply( (i+1):n.variables,
+                                           function( j, i ) {
+                                               if ( FALSE == log ) {
+                                                   ## Données brutes : on fait le rapport…
+                                                   R <- d[ , noms[ i ] ] / d[ , noms[ j ] ]
+                                               } else {
+                                                   ## Données en log : on fait la différence…
+                                                   R <- d[ , noms[ i ] ] - d[ , noms[ j ] ]
+                                               }
+                
+                                               ## Si demandé, on passe en log
+                                               if ( TRUE == en.log ) {
+                                                   R <- log( R )
+                                               }
 
-            ## On la stocke dans la data.frame
-            d.calculs[ , nom.var ] <- R
+                                               ## On la stocke dans la data.frame
+                                               d.calculs[ , nom.var ] <- R
 
-            ## On fait le calcul & on stocke
-            DF.p[ idx.ligne, -c( 1,2 ) ] <- f.p( d = d.calculs, variable = nom.var, ... )
-            idx.ligne <- idx.ligne + 1
+                                               ## On fait le calcul
+                                               p <- f.p( d = d.calculs, variable = nom.var, ... )
+
+                                               ## On renvoie cette valeur
+                                               p
+                                           }, i = i,
+                                           mc.cores = n.coeurs )
+
+            ## On place les lignes de la matrice
+            ligne.p <- do.call( rbind, ligne.p )
+            DF.p[ idx.ligne.debut:idx.ligne.fin, -c( 1,2 ) ] <- ligne.p
         }
     }
     

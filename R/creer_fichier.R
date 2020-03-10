@@ -11,6 +11,9 @@
 ##  11 mai  2018 : création du fichier (d'après creer_df.R)
 ##
 ##   1 juin 2018 : repris le code des analyses de Bruno Saubaméa pour finaliser
+##
+##  25 nov. 2019 : le masque de data.frame des résultats ne contient pas
+##                   nom.var (R par défaut : la variable des rapportd)...                              
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -50,7 +53,7 @@ creer.Fp <- function( d, nom.fichier,
     }
 
     ## On construit le masque de la data.frame des résultats
-    DF.p.vide <- read.table( text = paste( na.omit( c( noms.colonnes, add.col, nom.var ) ),
+    DF.p.vide <- read.table( text = paste( na.omit( c( noms.colonnes, add.col ) ),
                                            collapse = ';' ),
                              header = TRUE, sep = ';' )
 

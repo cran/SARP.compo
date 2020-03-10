@@ -24,7 +24,7 @@
 ##  12 mai  2018 : généralisé choisir.seuil pour avoir un masque de data.frame quelconque
 ##                 changé la fonction par défaut à student.fpc : légèrement plus rapide
 ##
-##   1 oct. 2018 : réarrangé choisir_seuil pour utiliser le parallélisme
+##   1 oct. 2018 : réarrangé choisir.seuil pour utiliser le parallélisme
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————

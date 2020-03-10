@@ -22,7 +22,6 @@ choisir.seuil( n.genes,
                n.coeurs = 1,
                ... ) 
 }
-
 \arguments{
   \item{n.genes}{
     Number of genes to be quantified simultaneously
@@ -88,7 +87,8 @@ choisir.seuil( n.genes,
    parallelization using forks (does not work on Windows) with the help
    of the parallel package.}
  
-  \item{\dots}{additional arguments, to be used by the analysis function f.p}
+  \item{\dots}{additional arguments, to be used by the analysis function
+    f.p}
 }
 
 \details{ The \code{choisir.seuil} function simulates \code{B} datasets

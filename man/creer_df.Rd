@@ -17,7 +17,7 @@ creer.DFp( d, noms, f.p = student.fpc,
            log = FALSE, en.log = !log,
            nom.var = 'R',
            noms.colonnes = c( "Cmp.1", "Cmp.2", "p" ),
-           add.col = "delta",
+           add.col = "delta", n.coeurs = 1,
            \dots )
 }
 \arguments{
@@ -80,6 +80,10 @@ creer.DFp( d, noms, f.p = student.fpc,
     columns of the data.frame, used for storing additional return values
     of \code{f.p} (all but the first one).
   }
+
+  \item{n.coeurs}{The number of CPU cores to use in computation, with
+   parallelization using forks (does not work on Windows) with the help
+   of the parallel package.}
 
   \item{\dots}{additional arguments to \code{f.p}, passed unchanged to
     it.}
