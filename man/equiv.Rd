@@ -10,7 +10,8 @@
   tests to ensure edge existence  
 }
 \usage{
-equiv.fpc( d, variable, v.X, var.equal = TRUE, Delta = 0.5, \dots ) 
+equiv.fpc( d, variable, v.X, var.equal = TRUE, Delta = 0.5,
+           pred = FALSE, \dots ) 
 }
 \arguments{
     \item{d}{
@@ -37,6 +38,18 @@ equiv.fpc( d, variable, v.X, var.equal = TRUE, Delta = 0.5, \dots )
   \item{Delta}{
     The value giving the positive limit of the equivalence region. For
     symmetry reasons, the equivalence region will be [-Delta, Delta].
+  }
+
+  \item{pred}{
+    If \code{FALSE}, a standard equivalence test of the mean difference
+    is done.
+    
+    If \code{TRUE}, the p-value is computed assuming the variance of the
+    difference, and not the difference of the means. This allows to take
+    into account the sampling variability in the interval width,
+    avoiding (with large sample sizes) too narrow intervals
+    to fit in the equivalence region when large inter-sample variability
+    does not allow to consider genes as reliable reference genes.
   }
   
   \item{\dots}{additional arguments}

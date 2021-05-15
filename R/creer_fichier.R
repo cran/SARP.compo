@@ -62,8 +62,11 @@ creer.Fp <- function( d, nom.fichier,
 
     ## Et on met les noms de colonnes, si demandé
     if ( col.names ) {
-        write.table( x = DF.p.vide, file = fichier.csv, append = TRUE,
-                     quote = FALSE, sep = sep, dec = dec, row.names = row.names, col.names = TRUE )
+        ## Attention, comme c'est les colonnes, donne un avertissement
+        ##   mais voulu -> on le supprime
+        suppressWarnings( write.table( x = DF.p.vide, file = fichier.csv, append = TRUE,
+                                       quote = FALSE, sep = sep, dec = dec,
+                                       row.names = row.names, col.names = TRUE ) )
     }
 
     ## On fait les calculs dans les diverses situations…

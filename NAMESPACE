@@ -43,7 +43,7 @@ exportPattern( "\\.fpc$" )              # Toutes les fonctions se finissant par 
 
 ## Les fonctions extérieures utilisées...
 import( "stats" )
-importFrom( "igraph", "V", "V<-", "add.edges", "add.vertices",
+importFrom( "igraph", "E", "degree", "V", "V<-", "add.edges", "add.vertices",
             "components", "graph_from_adjacency_matrix",
             "graph_from_data_frame", "make_empty_graph", "make_full_graph", "vertices" )
 importFrom( "car"    , "Anova" )

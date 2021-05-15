@@ -175,7 +175,8 @@ grf.Fp( nom.fichier, col.noms = c( 1, 2 ), p = 0.05, col.p = 'p',
    #  and store them in a text file
    creer.Fp( poteries, nom.fichier,
              c( 'Al', 'Na', 'Fe', 'Ca', 'Mg' ),
-             f.p = anva1.fpc, v.X = 'Site' )
+             f.p = anva1.fpc, v.X = 'Site',
+             add.col = c( 'mu0', 'd.C', 'd.CoA', 'd.IT', 'd.L' ) )
 
    # Make a graphe from it and plot it
    plot( grf.Fp( nom.fichier ) )

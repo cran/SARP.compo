@@ -16,6 +16,9 @@
 ##   9 mars 2020 : corrigé le calcul du sigma de la différence
 ##                  (oublié le terme en racine( 1/n1 + 1/n2 )...)
 ##                 au passage, supprimé un ×2 / 2 inutile...
+##
+##  18 mars 2020 : le fait de corriger par racine( ... ) est en option
+##                  (idée : sans, espèce d'intervalle de prédiction...)
 ## ——————————————————————————————————————————————————————————————————————
 
 ## ——————————————————————————————————————————————————————————————————————
@@ -26,8 +29,10 @@
 ##  v.X       : la variable explicative
 ##  var.equal : si TRUE, on suppose les variances égales
 ##  Delta     : la limites de l'intervalle d'équivalence
+##  pred      : si TRUE, ne corrige pas par 1/n
 ## 
-equiv.fpc <- function( d, variable, v.X, var.equal = TRUE, Delta = 0.5, ... ) {
+equiv.fpc <- function( d, variable, v.X, var.equal = TRUE, Delta = 0.5,
+                       pred = FALSE, ... ) {
     ## Moyenne, taille et variance par groupe
     n  <- tapply( d[ , variable ], d[ , v.X ], function( x ) { length( na.omit( x ) ) } )
     m  <- tapply( d[ , variable ], d[ , v.X ], mean, na.rm = TRUE )
@@ -48,7 +53,9 @@ equiv.fpc <- function( d, variable, v.X, var.equal = TRUE, Delta = 0.5, ... ) {
         ddl <- s2.delta^2 / ( ( s2[ 1 ] / n[ 1 ] )^2 / ( n[ 1 ] - 1 ) +
                               ( s2[ 2 ] / n[ 2 ] )^2 / ( n[ 2 ] - 1 ) )
     }
-    s.delta <- s.delta * sqrt( 1/n[ 1 ] + 1/n[ 2 ] )
+    if ( FALSE == pred ) {
+        s.delta <- s.delta * sqrt( 1/n[ 1 ] + 1/n[ 2 ] )
+    }
 
     ## On calcule les quantiles qu'il faut pour avoir coïncidence des bornes de l'IC
     t.lim <- ( Delta + c( m.delta, - m.delta ) ) / s.delta
